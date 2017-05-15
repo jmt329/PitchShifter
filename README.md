@@ -11,7 +11,7 @@
 [ebab_sm]: pictures/ebab_state_machine.png "EBAB State Machine"
 [gui]: pictures/gui.jpg "GIU control on VGA monitor"
 [gui_changed]: pictures/gui_changed.jpg "GIU control on VGA monitor"
-[avg]: pictutes/avg_fadingpng "Avergae fading between circular buffers"
+[avg]: pictures/avg_fadingpng "Avergae fading between circular buffers"
 [filters]: pictures/filters.jpg "Adding filters to output"
 
 # Introduction
