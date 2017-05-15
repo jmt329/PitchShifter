@@ -213,4 +213,4 @@ The group approves the video for inclusion on the course YouTube channel.
 ## Appendix B
 
 See [GitHub](https://github.com/jmt329/PitchShifter) for code.
-DE1_SoC_Computer.v from Altera University Computer
+`DE1_SoC_Computer.v` from Altera University Computer
