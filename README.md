@@ -65,7 +65,7 @@ To resolve these noise artifacts, we use a dual-buffer design. The key idea is t
 
 A simplified state diagram of the described circular buffer module actions can be found in Figure 5. It is worth noting that an output valid signal for each buffer is raised while in state S2, which facilitates synchronization with the EBAB Wrapper module (described in a following section).
 
-![][buffer2]
+![][buffer_state]
 <p align="center">
 Figure 5: Circular buffer module state machine
 </p>
