@@ -201,5 +201,7 @@ The group approves this report for inclusion on the course website.
 
 The group approves the video for inclusion on the course YouTube channel.
 
-<!--  LocalWords:  FPGA qsys EBAB shifter HPS shifters verilog DSP
- -->
+## Appendix B
+
+See [GitHub](https://github.com/jmt329/PitchShifter) for code.
+DE1_SoC_Computer.v from Altera University Computer
