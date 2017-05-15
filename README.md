@@ -30,7 +30,7 @@ Testing was done by creating a separate verilog module containing all aspects of
 
 #### Design
 
-We used a 6th order Butterworth filter on the output from the circular buffers in order to smooth the high frequency noise from the signal. We modified code from the DSP for DE2 page (https://people.ece.cornell.edu/land/courses/ece5760/DE2/fpgaDSP.html), using the given matlab scripts to generate the necessary constants for the desired filters. We changed the accuracy from 18-bit fixed point (2.16) to 32-bit fixed point (2.30) to give us better accuracy as well as to conform to the 32-bit width of our samples throughout the rest of the project. We also changed the incoming signal, dividing it by 2 (arithmetically shifting right by one), so that we would not have any overflow when we did the necessary multiply and accumulate needed by the Butterworth filter. By dividing by 2, we reduce the magnitude of the incoming signals to a range of [0,2) from [0,4), and since there is a multiplication, the range of outputs from the multiplier is [0,4), which fits in the 2.30 representation. We set the cutoff frequency to 3500 Hz, as we estimated this to be near the top of the range of human voice, so any high frequency noise at a higher frequency than this should be attenuated as much as possible.
+We used a 6th order Butterworth filter on the output from the circular buffers in order to smooth the high frequency noise from the signal. We modified code from the [DSP for DE2 page](https://people.ece.cornell.edu/land/courses/ece5760/DE2/fpgaDSP.html), using the given matlab scripts to generate the necessary constants for the desired filters. We changed the accuracy from 18-bit fixed point (2.16) to 32-bit fixed point (2.30) to give us better accuracy as well as to conform to the 32-bit width of our samples throughout the rest of the project. We also changed the incoming signal, dividing it by 2 (arithmetically shifting right by one), so that we would not have any overflow when we did the necessary multiply and accumulate needed by the Butterworth filter. By dividing by 2, we reduce the magnitude of the incoming signals to a range of [0,2) from [0,4), and since there is a multiplication, the range of outputs from the multiplier is [0,4), which fits in the 2.30 representation. We set the cutoff frequency to 3500 Hz, as we estimated this to be near the top of the range of human voice, so any high frequency noise at a higher frequency than this should be attenuated as much as possible.
 
 #### Testing
 
@@ -44,7 +44,7 @@ The EBAB wrapper was used to encapsulate the processing of our design. This modu
 
 The EBAB wrapper instantiates a circular buffer and filter for each audio channel as seen in Figure B. The inputs to each of these modules are data/valid pairs. Since audio samples are coming in at 96 kHz and the FPGA is clocked at 50 MHz, each output sample is computed much faster than a new output sample. For this reason we simplified from a full valid/ready latency insensitive interface to just data/valid pairs. Incoming read data is stored in each circular buffer whose output is connected to a Butterworth filter. The output from the filter is ready to be written to the audio out fifo.
 
-The state machine in Figure S shows when data comes in and out of the wrapper. The code was adapted from the audio-loopback example on the DSP page of the course website (https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/DSP_index.html). The state machine starts by writing stereo to the audio FIFO and then reads new data from the audio FIFO. The first step is to read from the audio FIFO address to see if any space is available. Is there is enough space for both sample (left and right channel), the state machine proceeds to write each sample one at a time. If there is not enough space available, the state machine checks again. In practice the audio fifo was found to have enough space since we were writing at approximately the sample rate. After the writes are finished the state machine reads the audio FIFO address the check for available reads. If there is at least one sample available it reads from both channels. For the purpose of this lab, we only used the right audio input. When the right audio input was read we assert a valid signal for one cycle which kicks off the computation of a new sample. The state machine then returns back to the beginning.
+The state machine in Figure S shows when data comes in and out of the wrapper. The code was adapted from the audio-loopback example on the DSP page of the [course website](https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/HPS_peripherials/DSP_index.html). The state machine starts by writing stereo to the audio FIFO and then reads new data from the audio FIFO. The first step is to read from the audio FIFO address to see if any space is available. Is there is enough space for both sample (left and right channel), the state machine proceeds to write each sample one at a time. If there is not enough space available, the state machine checks again. In practice the audio fifo was found to have enough space since we were writing at approximately the sample rate. After the writes are finished the state machine reads the audio FIFO address the check for available reads. If there is at least one sample available it reads from both channels. For the purpose of this lab, we only used the right audio input. When the right audio input was read we assert a valid signal for one cycle which kicks off the computation of a new sample. The state machine then returns back to the beginning.
 
 #### Testing
 
@@ -62,6 +62,8 @@ The entirety of the testing done for the HPS program was done through usage test
 
 ## Results
 
+Check out our [video](https://youtu.be/VeT4ikeRbic) on YouTube.
+
 ## Conclusion
 
 Overall, this was a successful final project as we were able to implement real-time voice pitch shifting along with several other voice effects. Most importantly, the design we use is extremely simple and efficient in terms of the hardware implementation. One thing to note is that our method for pitch-shifting the voice input is a time-domain solution as opposed to the more common frequency-domain solutions that are found online. In terms of future work, it might be interesting to complete a frequency-domain pitch-shift method as well and compare the final results to our current design, evaluating the pros and cons of each method. However, we are satisfied with our design since it achieves all of the capabilities we had planned for at the outset of the project, and we were able to fully complete and test all aspects in the short project timeline.
@@ -70,32 +72,36 @@ In terms of other considerations for this project, we do not foresee any legal o
 
 ## Work Distribution
 
-Gulnar Mirza
+### Gulnar Mirza
 - Dual circular buffer module design, implementation, and testing in MATLAB
 - Implemented pitch-shift (buffer) module in hardware
 - Tested pitch-shift (buffer) module in ModelSim
 - Designed and implemented delta modulation effect in hardware
 - Tested delta modulation effect in MATLAB and hardware
 
-James Talmage
+### James Talmage
 - MATLAB testing of ring-buffer and filters
 - Designed and implemented EBAB (audio read/write) module
 - Tested EBAB module in ModelSim
 - Implemented independent right/left audio output pitch-shift control for chords
 - Implemented C program for GUI control on HPS
 
-Sean Carroll
+### Sean Carroll
 - Tested EBAB module in ModelSim
 - Implemented Butterworth filter in hardware
 - Tested Butterworth filter in ModelSim
 - Implemented C program for GUI control on HPS
 
 ## References
-[1] https://people.ece.cornell.edu/land/courses/ece5760/
-[2] https://people.ece.cornell.edu/land/courses/ece5760/DE2/fpgaDSP.html
-[3] https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/Audio_core.pdf
-[4] https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/External_Bus_to_Avalon_Bridge.pdf
-[5] http://www.wavefrontsemi.com/products/update/AL3201/WavefrontAN3201-02.pdf
+[1] [https://people.ece.cornell.edu/land/courses/ece5760/](https://people.ece.cornell.edu/land/courses/ece5760/)
+
+[2] [https://people.ece.cornell.edu/land/courses/ece5760/DE2/fpgaDSP.html](https://people.ece.cornell.edu/land/courses/ece5760/DE2/fpgaDSP.html)
+
+[3] [https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/Audio_core.pdf](https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/Audio_core.pdf)
+
+[4] [https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/External_Bus_to_Avalon_Bridge.pdf](https://people.ece.cornell.edu/land/courses/ece5760/DE1_SOC/External_Bus_to_Avalon_Bridge.pdf)
+
+[5] [http://www.wavefrontsemi.com/products/update/AL3201/WavefrontAN3201-02.pdf](http://www.wavefrontsemi.com/products/update/AL3201/WavefrontAN3201-02.pdf)
 
 ## Acknowledgements
 
@@ -106,44 +112,3 @@ We would like to thank Bruce Land for helping and advising us throughout the ent
 The group approves this report for inclusion on the course website
 
 The group approves the video for inclusion on the course youtube channel
-
-
-
-
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/jmt329/PitchShifter/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/jmt329/PitchShifter/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
