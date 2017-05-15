@@ -1,18 +1,4 @@
 [project_setup]: pictures/project_setup.jpg "Project Setup with speackers, mouse, microphone, and FPGA"
-[qsys1]: pictues/qsys1.png "Screenshot of qsys screen"
-[qsys2]: pictues/qsys2.png "Screenshot of qsys screen"
-[qsys3]: pictues/qsys3.png "Screenshot of qsys screen"
-[buffer1]: pictures/RB_example.png "Circular buffer update for delta=2"
-[buffer2]: pictures/RB_example_2.png "Circular buffer update for delta=0.5"
-[buffer_state]: pictures/ProjectBufferState.png "Circular buffer module state machine"
-[buffer_test]: pictutes/buffer_test.png "Waves screenshot of buffer test"
-[butter_test]: pictutes/butter_test.png "Waves screenshot of Butterworth-filter test"
-[wrapper]: pictures/wrapper.png "Block diagram of EBAB Wrapper"
-[ebab_sm]: pictures/ebab_state_machine.png "EBAB State Machine"
-[gui]: pictutes/gui.jpg "GIU control on VGA monitor"
-[gui_changed]: pictutes/gui_changed.jpg "GIU control on VGA monitor"
-[avg]: pictutes/avg_fadingpng "Avergae fading between circular buffers"
-[filters]: pictutes/filters.jpg "Adding filters to output"
 
 # Introduction
 
