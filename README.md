@@ -109,7 +109,7 @@ Figure 8: Block diagram of EBAB Wrapper
 
 #### Design
 
-The EBAB wrapper instantiates a circular buffer and filter for each audio channel as seen in Figure 8. The inputs to each of these modules are data/valid pairs. Since audio samples are coming in at 96 kHz and the FPGA is clocked at 50 MHz, each output sample is computed much faster than a new output sample. For this reason we simplified from a full valid/ready latency insensitive interface to just data/valid pairs. Incoming read data is stored in each circular buffer whose output is connected to a Butterworth filter. The output from the filter is ready to be written to the audio out FIFO.
+The EBAB wrapper instantiates a circular buffer and filter for each audio channel as seen in Figure 8, which enables independent voice effects on each of the two external speakers. The inputs to each of these modules are data/valid pairs. Since audio samples are coming in at 96 kHz and the FPGA is clocked at 50 MHz, each output sample is computed much faster than a new output sample. For this reason we simplified from a full valid/ready latency insensitive interface to just data/valid pairs. Incoming read data is stored in each circular buffer whose output is connected to a Butterworth filter. The output from the filter is ready to be written to the audio out FIFO.
 
 ![][ebab_sm]
 <p align="center">
@@ -133,11 +133,11 @@ Figure 10: GUI control on VGA monitor
 
 The HPS program for this project functioned as a driver for the hardware modules we designed. The program controlled certain parameters related to different functionalities of the modules instantiated in the FPGA fabric. The communication was done largely through parallel input ports that looked like memory to the HPS program. We also used the HPS program to write directly to a VGA screen to provide a user interface for our pitch shifter. Also, the HPS program allowed the use of a mouse to set the various values, while interacting with the VGA screen through buttons and sliders we created. The main body of the program revolved around the mouse input, waiting for a left click event to occur. We had drawn preliminary structures on the screen to represent buttons and sliders, as well as placing text on the screen to guide the user. When a user would click on a button, the program would change some parameter and possibly update the screen, as in the case of moving a slider bar or changing the mode of one of the output channels. This was all done through multiple variables keeping track of the current state of the VGA screen and recognizing where the mouse was clicked on the screen.
 
-Based on this set up, the mouse input is used to either increase/decrease the pitch-shift amount (delta variable) by multiplying/dividing by 2^(1/12), while limiting delta to the range of [0.5,2]. This allows the pitch to be shifted by up to one octave in either direction. Furthermore, the mouse input can be used to change the delta mode of the pitch-shift to use the built-in delta modulation mode of the buffer module. In this mode, the slider bar is used to control the period of the modulation, limited to a range of T = [0.5,2] seconds, by modifying the modulation counter variable described in the pitch-shifter design section. 
+Based on this set up, the mouse input is used to either increase/decrease the pitch-shift amount (delta variable) by multiplying/dividing by 2^(1/12), while limiting delta to the range of [0.5,2]. This allows the pitch to be shifted by up to one octave in either direction. Furthermore, the mouse input can be used to change the delta mode of the pitch-shift to use the built-in delta modulation mode of the buffer module. In this mode, the slider bar is used to control the period of the modulation, limited to a range of T = [0.5,2] seconds, by modifying the modulation counter variable described in the pitch-shifter design section. Finally, a reset button is included to easily return to a non-pitch-shifted output on both speakers (i.e., delta=1 for both speakers).
 
 ### Testing
 
-The entirety of the testing done for the HPS program was done through usage testing, as it was a user interface primarily. We tested the transfer of information between the HPS and the fabric through a few dedicated hard-coded values. Following this, we began building the UI by first defining where the different buttons and sliders would be on the screen, and placing print statements into the code to give an indication that we were clicking in the correct areas. Much of the rest of the testing was done this way: build a new part of the interface, then insert debugging print statements to prove to ourselves that it was functioning how we expected, then move on.
+The entirety of the testing done for the HPS program was done through usage testing, as it was primarily a user interface. We tested the transfer of information between the HPS and the fabric through a few dedicated hard-coded values. Following this, we began building the UI by first defining where the different buttons and sliders would be on the screen, and placing print statements into the code to give an indication that we were clicking in the correct areas. Much of the rest of the testing was done this way: build a new part of the interface, then insert debugging print statements to prove to ourselves that it was functioning how we expected, then move on.
 
 ## Results
 
@@ -153,7 +153,11 @@ Figure 11: Shifting the frequency up and down
 Figure 12: On the left the shifted output shows the discontinuities resulting from the averaging the circular buffers. On the right we tested different filters and combinations resulting in our choice to use a Butterworth filter
 </p>
 
-Finally, the video below contains a demo of the real-time pitch shifting effects performed by the final hardware design.
+As described in earlier sections, the final design enables the user to modify the output voice pitch by up to one octave in either direction. Additionally, the user can select the delta modulation mode, which automatically varies delta between [0.5,1.5], and vary the modulation period between 0.5s to 2s. These actions can be performed independently for each speaker. As seen in the images in the software development section, the GUI is extremely intuitive and user-friendly, facilitating the usability of our design.
+
+User safety is not an issue for this project, since the user need only use the mouse to click on the screen and hold the microphone close to their face while speaking. To prevent audio feedback, we use a microphone that has a long enough cord such that the user can easily remain at a large enough distance from the speakers to avoid these undesirable effects. Furthermore, we did not experience any interference issues while working on this project since the microphone needed to be held fairly close to the user in order to receive the audio input.
+
+The video below contains a demo of the real-time pitch shifting effects performed by the final hardware design.
 
 [video on YouTube](https://youtu.be/VeT4ikeRbic)
 
