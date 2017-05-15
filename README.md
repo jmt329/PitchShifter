@@ -13,6 +13,8 @@
 [gui_changed]: pictures/gui_changed.jpg "GIU control on VGA monitor"
 [avg]: pictures/avg_fading.png "Average fading between circular buffers"
 [filters]: pictures/filters.png "Adding filters to output"
+[up]: pictures/pitchinc.png "Pitch shifting up"
+[down]: pictures/pitchdec.png "Pitch shifting down"
 
 Sean Carroll (swc63), Gulnar Mirza (gzm3), James Talmage (jmt329)
 
@@ -134,11 +136,16 @@ The entirety of the testing done for the HPS program was done through usage test
 
 ## Results
 
-The following figures depict the achieved pitch-shifting in MATLAB simulations using a sine wave input. Additionally, Figure 11 illustrates the occurrence of a discontinuity artifact as well as the smoothing performed by the median and Butterworth filters.
+The following figures depict the achieved pitch-shifting in MATLAB simulations using a sine wave input. Additionally, Figure 12 illustrates the occurrence of a discontinuity artifact as well as the smoothing performed by the median and Butterworth filters.
+
+![][up] ![][down]
+<p align="center">
+Figure 11: Shifting the frequency up and down
+</p>
 
 ![][avg] ![][filters]
 <p align="center">
-Figure 11: On the left the shifted output shows the discontinuities resulting from the averaging the circular buffers. On the right we tested different filters and combinations resulting in our choice to use a Butterworth filter
+Figure 12: On the left the shifted output shows the discontinuities resulting from the averaging the circular buffers. On the right we tested different filters and combinations resulting in our choice to use a Butterworth filter
 </p>
 
 Finally, the video below contains a demo of the real-time pitch shifting effects performed by the final hardware design.
